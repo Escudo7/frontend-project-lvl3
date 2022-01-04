@@ -1,0 +1,19 @@
+name: GitHub Actions
+on:
+  - push
+  - pull_request
+jobs:
+  my-job:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: node install
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: project install
+        run: npm ci
+        env:
+          CI: true
+      - name: Linter
+        run: make lint
