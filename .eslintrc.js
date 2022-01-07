@@ -12,5 +12,7 @@ module.exports = {
   },
   rules: {
     'no-console': 0,
+    'import/extensions': 0,
+    'no-param-reassign': 0,
   },
 };
