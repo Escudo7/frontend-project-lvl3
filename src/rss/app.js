@@ -15,6 +15,7 @@ export default () => {
 
   const initState = {
     rssList: [],
+    postList: [],
     form: {
       valid: true,
       value: '',
