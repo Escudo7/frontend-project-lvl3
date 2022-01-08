@@ -1,11 +1,7 @@
 import onChange from 'on-change';
 import render from './renderer.js';
+import selectors from './selectors';
 import { inputHandler, submitHandler } from './handlers.js';
-
-const selectors = {
-  rssForm: 'form[data-place=form-rss]',
-  rssAddInput: 'input[name=add-rss]',
-};
 
 export default () => {
   const initState = {
@@ -16,16 +12,8 @@ export default () => {
       error: null,
     },
   };
-  const state = onChange(initState, (path) => {
-    switch (path) {
-      case 'rssList':
-      case 'form.valid':
-      case 'form.error':
-        render(state);
-        break;
-      default:
-        break;
-    }
+  const state = onChange(initState, (path, value) => {
+    render(path, value);
   });
 
   const inputRss = document.querySelector(selectors.rssAddInput);
