@@ -1,12 +1,20 @@
-import { string } from 'yup';
+import { string, setLocale } from 'yup';
 
-export default (e, state) => {
+export default (e, state, i18next) => {
+  setLocale({
+    mixed: {
+      required: i18next.t('errorRssRequired'),
+    },
+    string: {
+      url: i18next.t('errorRssValidUrl'),
+    },
+  });
   const rssSchema = string()
     .lowercase()
     .required()
     .trim()
     .url()
-    .test('unique', 'этот RSS уже был добавлен ранее', (value) => !state.rssList.includes(value));
+    .test('unique', i18next.t('errorRssExists'), (value) => !state.rssList.includes(value));
   const formData = new FormData(e.target);
   rssSchema.validate(formData.get('add-rss'))
     .then((rss) => {

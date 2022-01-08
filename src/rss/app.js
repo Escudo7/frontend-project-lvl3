@@ -1,9 +1,18 @@
 import onChange from 'on-change';
+import i18next from 'i18next';
 import render from './renderer.js';
 import selectors from './selectors';
 import { inputHandler, submitHandler } from './handlers.js';
+import ru from './lang/ru';
 
 export default () => {
+  const i18nextInstance = i18next.createInstance();
+  i18nextInstance.init({
+    lng: 'ru',
+    debug: true,
+    resources: { ru },
+  });
+
   const initState = {
     rssList: [],
     form: {
@@ -23,6 +32,6 @@ export default () => {
 
   const form = document.querySelector(selectors.rssForm);
   if (form) {
-    form.addEventListener('submit', (e) => submitHandler(e, state));
+    form.addEventListener('submit', (e) => submitHandler(e, state, i18nextInstance));
   }
 };
