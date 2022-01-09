@@ -11,6 +11,7 @@ export const inputHandler = (e, state) => {
 
 export const submitHandler = (event, state, i18next) => {
   event.preventDefault();
+  console.log(state);
   validate(event, state.rssList, i18next)
     .then((link) => axios.get(getProxyLinkPref() + encodeURIComponent(link)))
     .then(({ data }) => {
@@ -30,8 +31,8 @@ export const submitHandler = (event, state, i18next) => {
         state.form.valid = true;
         state.form.value = '';
         state.form.error = null;
-        state.rssList.push(feed);
-        state.postList.push(...dataParsed.posts);
+        state.rssList.unshift(feed);
+        state.postList.unshift(...dataParsed.posts);
       } catch (e) {
         state.form.valid = false;
         state.form.error = i18next.t('error.notValidRss');

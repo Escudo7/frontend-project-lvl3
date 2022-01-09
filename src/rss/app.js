@@ -9,7 +9,6 @@ export default () => {
   const i18nextInstance = i18next.createInstance();
   i18nextInstance.init({
     lng: 'ru',
-    debug: true,
     resources: { ru },
   });
 
