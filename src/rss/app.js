@@ -2,7 +2,7 @@ import onChange from 'on-change';
 import i18next from 'i18next';
 import render from './renderer.js';
 import selectors from './selectors';
-import { inputHandler, submitHandler } from './handlers.js';
+import { inputHandler, submitHandler, postsLoader } from './handlers.js';
 import ru from './lang/ru';
 
 export default () => {
@@ -34,4 +34,7 @@ export default () => {
   if (form) {
     form.addEventListener('submit', (e) => submitHandler(e, state, i18nextInstance));
   }
+
+  const postsLoadTimeout = 5000;
+  document.addEventListener('DOMContentLoaded', () => postsLoader(state, postsLoadTimeout));
 };
