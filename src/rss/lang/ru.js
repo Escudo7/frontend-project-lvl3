@@ -1,8 +1,11 @@
 export default {
   translation: {
-    errorRssExists: 'этот RSS уже был добавлен ранее',
-    errorRssRequired: 'это обязательное поле',
-    errorRssValidUrl: 'ссылка должна быть валидным URL',
-    errorRssValid: 'Ресурс не содержит валидный RSS',
+    error: {
+      rssExists: 'этот RSS уже был добавлен ранее',
+      required: 'это обязательное поле',
+      notValidUrl: 'ссылка должна быть валидным URL',
+      notValidRss: 'Ресурс не содержит валидный RSS',
+    },
+
   },
 };

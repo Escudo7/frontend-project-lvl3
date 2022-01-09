@@ -18,7 +18,7 @@ export const submitHandler = (event, state, i18next) => {
 
       if (_.has(status, 'error') || contents === null) {
         state.form.valid = false;
-        state.form.error = i18next.t('errorRssValid');
+        state.form.error = i18next.t('error.notValidRss');
 
         return;
       }
@@ -34,7 +34,7 @@ export const submitHandler = (event, state, i18next) => {
         state.postList.push(...dataParsed.posts);
       } catch (e) {
         state.form.valid = false;
-        state.form.error = i18next.t('errorRssValid');
+        state.form.error = i18next.t('error.notValidRss');
       }
     })
     .catch((exception) => {
