@@ -19,9 +19,9 @@ export default (contents) => {
   };
 
   const posts = Array.from(dataParsed.querySelectorAll('item')).map((itemElement) => {
-    const postTitle = itemElement.querySelector('title');
-    const postDescription = itemElement.querySelector('description');
-    const postLink = itemElement.querySelector('link');
+    const postTitle = itemElement.querySelector('title')?.textContent;
+    const postDescription = itemElement.querySelector('description')?.textContent;
+    const postLink = itemElement.querySelector('link')?.textContent;
     const postId = _.uniqueId('post_');
 
     return {
