@@ -6,6 +6,7 @@ export default {
       notValidUrl: 'ссылка должна быть валидным URL',
       notValidRss: 'Ресурс не содержит валидный RSS',
     },
-
+    titleFeeds: 'RSS каналы',
+    titlePosts: 'Посты',
   },
 };

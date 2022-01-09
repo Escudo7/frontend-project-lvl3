@@ -23,7 +23,7 @@ export default () => {
     },
   };
   const state = onChange(initState, (path, value) => {
-    render(path, value);
+    render(path, value, i18nextInstance);
   });
 
   const inputRss = document.querySelector(selectors.rssAddInput);
