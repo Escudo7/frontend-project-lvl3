@@ -9,12 +9,12 @@ export default () => {
   const i18nextInstance = i18next.createInstance();
   i18nextInstance.init({
     lng: 'ru',
-    debug: true,
     resources: { ru },
   });
 
   const initState = {
     rssList: [],
+    postList: [],
     form: {
       valid: true,
       value: '',
@@ -22,7 +22,7 @@ export default () => {
     },
   };
   const state = onChange(initState, (path, value) => {
-    render(path, value);
+    render(path, value, i18nextInstance);
   });
 
   const inputRss = document.querySelector(selectors.rssAddInput);

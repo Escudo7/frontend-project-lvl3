@@ -1,12 +1,12 @@
 import { string, setLocale } from 'yup';
 
-export default (e, state, i18next) => {
+export default (e, rssList, i18next) => {
   setLocale({
     mixed: {
-      required: i18next.t('errorRssRequired'),
+      required: i18next.t('error.required'),
     },
     string: {
-      url: i18next.t('errorRssValidUrl'),
+      url: i18next.t('error.notValidUrl'),
     },
   });
   const rssSchema = string()
@@ -14,17 +14,8 @@ export default (e, state, i18next) => {
     .required()
     .trim()
     .url()
-    .test('unique', i18next.t('errorRssExists'), (value) => !state.rssList.includes(value));
+    .test('unique', i18next.t('error.rssExists'), (value) => !rssList.find((rss) => rss.link === value));
   const formData = new FormData(e.target);
-  rssSchema.validate(formData.get('add-rss'))
-    .then((rss) => {
-      state.form.valid = true;
-      state.form.value = '';
-      state.form.error = null;
-      state.rssList.push(rss);
-    })
-    .catch((exception) => {
-      state.form.valid = false;
-      state.form.error = exception.message;
-    });
+
+  return rssSchema.validate(formData.get('add-rss'));
 };
