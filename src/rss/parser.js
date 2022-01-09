@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 export default (contents) => {
   const parser = new DOMParser();
   const dataParsed = parser.parseFromString(contents, 'application/xml');
@@ -11,9 +9,7 @@ export default (contents) => {
 
   const feedTitle = dataParsed.querySelector('channel title')?.textContent;
   const feedDescription = dataParsed.querySelector('channel description')?.textContent;
-  const feedId = _.uniqueId('feed_');
   const feed = {
-    id: feedId,
     title: feedTitle,
     description: feedDescription,
   };
@@ -22,11 +18,8 @@ export default (contents) => {
     const postTitle = itemElement.querySelector('title')?.textContent;
     const postDescription = itemElement.querySelector('description')?.textContent;
     const postLink = itemElement.querySelector('link')?.textContent;
-    const postId = _.uniqueId('post_');
 
     return {
-      id: postId,
-      feedId,
       title: postTitle,
       description: postDescription,
       link: postLink,
