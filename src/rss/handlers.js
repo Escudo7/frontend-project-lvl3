@@ -65,13 +65,13 @@ const postsLoad = (state) => {
         const isIdentityPost = (oldPost, newPost) => (
           oldPost.title === newPost.title && oldPost.feedId === feed.id
         );
-        const postFilter = (post) => (
-          !state.postList.find((oldPost) => isIdentityPost(oldPost, post))
+        const postFilter = (newPost) => (
+          !state.postList.find((oldPost) => isIdentityPost(oldPost, newPost))
         );
         const posts = dataParsed.posts.filter(postFilter);
 
         if (posts.length > 0) {
-          const postsPrepared = posts.map((post) => ({ ...post, id: _.uniqueId('post_'), feedI: feed.id }));
+          const postsPrepared = posts.map((post) => ({ ...post, id: _.uniqueId('post_'), feedId: feed.id }));
           state.postList.unshift(...postsPrepared);
         }
       } catch (e) {
