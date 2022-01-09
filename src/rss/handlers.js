@@ -11,7 +11,6 @@ export const inputHandler = (e, state) => {
 
 export const submitHandler = (event, state, i18next) => {
   event.preventDefault();
-  console.log(state);
   validate(event, state.rssList, i18next)
     .then((link) => axios.get(getProxyLinkPref() + encodeURIComponent(link)))
     .then(({ data }) => {
