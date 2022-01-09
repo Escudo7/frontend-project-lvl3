@@ -4,7 +4,7 @@ export default (contents) => {
   const errorNode = dataParsed.querySelector('parsererror');
 
   if (errorNode) {
-    throw new Error('not valid xml');
+    return null;
   }
 
   const feedTitle = dataParsed.querySelector('channel title')?.textContent;

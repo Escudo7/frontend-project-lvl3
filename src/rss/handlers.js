@@ -23,21 +23,24 @@ export const submitHandler = (event, state, i18next) => {
         return;
       }
 
-      try {
-        const dataParsed = parse(contents);
-        const feedId = _.uniqueId('feed_');
-        const feed = { ...dataParsed.feed, link: status.url, id: feedId };
-        const posts = dataParsed.posts.map((post) => ({ ...post, id: _.uniqueId('post_'), feedId }));
+      const dataParsed = parse(contents);
 
-        state.form.valid = true;
-        state.form.value = '';
-        state.form.error = null;
-        state.rssList.unshift(feed);
-        state.postList.unshift(...posts);
-      } catch (e) {
+      if (dataParsed === null) {
         state.form.valid = false;
         state.form.error = i18next.t('error.notValidRss');
+
+        return;
       }
+
+      const feedId = _.uniqueId('feed_');
+      const feed = { ...dataParsed.feed, link: status.url, id: feedId };
+      const posts = dataParsed.posts.map((post) => ({ ...post, id: _.uniqueId('post_'), feedId }));
+
+      state.form.valid = true;
+      state.form.value = '';
+      state.form.error = null;
+      state.rssList.unshift(feed);
+      state.postList.unshift(...posts);
     })
     .catch((exception) => {
       state.form.valid = false;
@@ -60,22 +63,23 @@ const postsLoad = (state) => {
         return;
       }
 
-      try {
-        const dataParsed = parse(contents);
-        const isIdentityPost = (oldPost, newPost) => (
-          oldPost.title === newPost.title && oldPost.feedId === feed.id
-        );
-        const postFilter = (newPost) => (
-          !state.postList.find((oldPost) => isIdentityPost(oldPost, newPost))
-        );
-        const posts = dataParsed.posts.filter(postFilter);
+      const dataParsed = parse(contents);
 
-        if (posts.length > 0) {
-          const postsPrepared = posts.map((post) => ({ ...post, id: _.uniqueId('post_'), feedId: feed.id }));
-          state.postList.unshift(...postsPrepared);
-        }
-      } catch (e) {
-        // exceptions will not be processed
+      if (dataParsed === null) {
+        return;
+      }
+
+      const isIdentityPost = (oldPost, newPost) => (
+        oldPost.title === newPost.title && oldPost.feedId === feed.id
+      );
+      const postFilter = (newPost) => (
+        !state.postList.find((oldPost) => isIdentityPost(oldPost, newPost))
+      );
+      const posts = dataParsed.posts.filter(postFilter);
+
+      if (posts.length > 0) {
+        const postsPrepared = posts.map((post) => ({ ...post, id: _.uniqueId('post_'), feedId: feed.id }));
+        state.postList.unshift(...postsPrepared);
       }
     });
   });
