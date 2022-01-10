@@ -5,6 +5,21 @@
         <title>RSS Agregator</title>
     </head>
     <body>
+        <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTitle"></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                        <a id="modal-show-link" class="btn btn-primary" href="#" role="button" target="_blank">Просмотреть</a>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="container">
             <div class="row">
                 <div class="col">
@@ -37,7 +52,7 @@
             </div>
             <div class="row mt-5">
                 <div class="col-7" data-place="posts"></div>
-                <div class="col-5" data-place="feeds"></div>
+                <div class="col-4 ms-4" data-place="feeds"></div>
             </div>
         </div>
     </body>

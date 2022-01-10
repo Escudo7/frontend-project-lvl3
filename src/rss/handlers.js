@@ -90,3 +90,13 @@ export const postsLoader = (state, timeout) => {
     postsLoad(state).then(() => postsLoader(state, timeout));
   }, timeout);
 };
+
+export const postPreview = (e, state) => {
+  const { postId } = e.target.dataset;
+  state.uiState.viewedPosts.push(postId);
+  state.uiState.vieingPost = postId;
+};
+
+export const modalCloseHandler = (state) => {
+  state.uiState.vieingPost = null;
+};
