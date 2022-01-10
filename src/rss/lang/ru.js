@@ -8,5 +8,6 @@ export default {
     },
     titleFeeds: 'RSS каналы',
     titlePosts: 'Посты',
+    titleShowPost: 'Просмотр',
   },
 };

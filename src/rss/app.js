@@ -2,7 +2,9 @@ import onChange from 'on-change';
 import i18next from 'i18next';
 import render from './renderer.js';
 import selectors from './selectors';
-import { inputHandler, submitHandler, postsLoader } from './handlers.js';
+import {
+  inputHandler, submitHandler, postsLoader, modalCloseHandler,
+} from './handlers.js';
 import ru from './lang/ru';
 
 export default () => {
@@ -20,9 +22,13 @@ export default () => {
       value: '',
       error: null,
     },
+    uiState: {
+      viewedPosts: [],
+      viewingPost: null,
+    },
   };
   const state = onChange(initState, (path, value) => {
-    render(path, value, i18nextInstance);
+    render(path, value, i18nextInstance, state);
   });
 
   const inputRss = document.querySelector(selectors.rssAddInput);
@@ -34,6 +40,11 @@ export default () => {
   if (form) {
     form.addEventListener('submit', (e) => submitHandler(e, state, i18nextInstance));
   }
+
+  const modalCloseBtns = document.querySelectorAll(selectors.modalCloseBtn);
+  modalCloseBtns.forEach((modalCloseBtn) => {
+    modalCloseBtn.addEventListener('click', () => modalCloseHandler(state));
+  });
 
   const postsLoadTimeout = 5000;
   document.addEventListener('DOMContentLoaded', () => postsLoader(state, postsLoadTimeout));
