@@ -12,24 +12,20 @@ export const inputHandler = (e, state) => {
 export const submitHandler = (event, state, i18next) => {
   event.preventDefault();
   validate(event, state.rssList, i18next)
-    .then((link) => axios.get(getProxyLinkPref() + encodeURIComponent(link)))
+    .then((link) => axios.get(getProxyLinkPref() + encodeURIComponent(link)).catch(() => {
+      throw new Error(i18next.t('messages.netError'));
+    }))
     .then(({ data }) => {
       const { status, contents } = data;
 
       if (_.has(status, 'error') || contents === null) {
-        state.form.valid = false;
-        state.form.error = i18next.t('error.notValidRss');
-
-        return;
+        throw new Error(i18next.t('messages.notValidRss'));
       }
 
       const dataParsed = parse(contents);
 
       if (dataParsed === null) {
-        state.form.valid = false;
-        state.form.error = i18next.t('error.notValidRss');
-
-        return;
+        throw new Error(i18next.t('messages.notValidRss'));
       }
 
       const feedId = _.uniqueId('feed_');
@@ -94,7 +90,7 @@ export const postsLoader = (state, timeout) => {
 export const postPreview = (e, state) => {
   const { postId } = e.target.dataset;
   state.uiState.viewedPosts.push(postId);
-  state.uiState.vieingPost = postId;
+  state.uiState.viewingPost = postId;
 };
 
 export const modalCloseHandler = (state) => {
