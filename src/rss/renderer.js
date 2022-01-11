@@ -77,35 +77,42 @@ const renderPosts = (posts, i18next, state) => {
   postContainer.append(postHeader, ...postsBlocks);
 };
 
-const renderInput = (isValid) => {
+const renderInput = (isValid, clearing = false) => {
   const input = document.querySelector(selectors.rssAddInput);
   if (!input) {
     return;
   }
 
+  if (clearing) {
+    input.value = '';
+  }
+
   if (isValid) {
     input.classList.remove('is-invalid');
+    input.classList.add('is-valid');
 
     return;
   }
 
+  input.classList.remove('is-valid');
   input.classList.add('is-invalid');
   input.focus();
 };
 
-const renderInvalidMessage = (message) => {
-  const invalidFeedback = document.querySelector(selectors.invalidFeedback);
-  if (!invalidFeedback) {
+const renderFeedback = (feedback, isValid) => {
+  const feedbackSelector = isValid ? selectors.validFeedback : selectors.invalidFeedback;
+  const feedbackElement = document.querySelector(feedbackSelector);
+  if (!feedbackElement) {
     return;
   }
 
-  if (message === null) {
-    invalidFeedback.textContent = '';
+  if (feedback === null) {
+    feedbackElement.textContent = '';
 
     return;
   }
 
-  invalidFeedback.textContent = message;
+  feedbackElement.textContent = feedback;
 };
 
 const renderModal = (postId, postList) => {
@@ -128,17 +135,12 @@ const renderModal = (postId, postList) => {
   modal.show();
 };
 
-const clearForm = () => {
-  const input = document.querySelector(selectors.rssAddInput);
-  input.value = '';
-  input.focus();
-};
-
 export default (path, value, i18next, state) => {
   switch (path) {
     case 'rssList':
-      clearForm();
+      renderInput(true, true);
       renderFeeds(value, i18next);
+      renderFeedback(i18next.t('messages.rssAddSuccessfully'), true);
       break;
 
     case 'postList':
@@ -150,14 +152,15 @@ export default (path, value, i18next, state) => {
       break;
 
     case 'form.error':
-      renderInvalidMessage(value);
+      renderFeedback(value, false);
+      renderFeedback(null, true);
       break;
 
     case 'uiState.viewedPosts':
       renderPosts(state.postList, i18next, state);
       break;
 
-    case 'uiState.vieingPost':
+    case 'uiState.viewingPost':
       if (value !== null) {
         renderModal(value, state.postList);
       }

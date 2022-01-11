@@ -2,6 +2,7 @@ export default {
   rssForm: 'form[data-place=form-rss]',
   rssAddInput: 'input[name=add-rss]',
   invalidFeedback: '.invalid-feedback',
+  validFeedback: '.valid-feedback',
   feeds: '[data-place=feeds]',
   posts: '[data-place=posts]',
   modal: '#modal',
