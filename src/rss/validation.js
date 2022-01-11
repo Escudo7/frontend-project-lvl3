@@ -17,5 +17,5 @@ export default (e, rssList, i18next) => {
     .test('unique', i18next.t('messages.rssExists'), (value) => !rssList.find((rss) => rss.link === value));
   const formData = new FormData(e.target);
 
-  return rssSchema.validate(formData.get('add-rss'));
+  return rssSchema.validate(formData.get('url'));
 };
