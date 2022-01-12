@@ -5,17 +5,17 @@ import parse from './parser.js';
 
 const getProxyLinkPref = () => 'https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=';
 
-export const inputHandler = (e, state) => {
-  state.form.value = e.target.value;
-};
-
 export const submitHandler = (event, state, i18next) => {
   event.preventDefault();
+  state.form.state = 'sending';
   validate(event, state.rssList, i18next)
-    .then((link) => axios.get(getProxyLinkPref() + encodeURIComponent(link)).catch(() => {
-      throw new Error(i18next.t('messages.netError'));
-    }))
-    .then(({ data }) => {
+    .then((link) => axios.get(getProxyLinkPref() + encodeURIComponent(link))
+      .then((response) => ({ response, link }))
+      .catch(() => {
+        throw new Error(i18next.t('messages.netError'));
+      }))
+    .then(({ response, link }) => {
+      const { data } = response;
       const { status, contents } = data;
 
       if (_.has(status, 'error') || contents === null) {
@@ -29,18 +29,17 @@ export const submitHandler = (event, state, i18next) => {
       }
 
       const feedId = _.uniqueId('feed_');
-      const feed = { ...dataParsed.feed, link: status.url, id: feedId };
+      const feed = { ...dataParsed.feed, link, id: feedId };
       const posts = dataParsed.posts.map((post) => ({ ...post, id: _.uniqueId('post_'), feedId }));
 
-      state.form.valid = true;
-      state.form.value = '';
       state.form.error = null;
+      state.form.state = 'success';
       state.rssList.unshift(feed);
       state.postList.unshift(...posts);
     })
     .catch((exception) => {
-      state.form.valid = false;
       state.form.error = exception.message;
+      state.form.state = 'error';
     });
 };
 

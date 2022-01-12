@@ -77,42 +77,57 @@ const renderPosts = (posts, i18next, state) => {
   postContainer.append(postHeader, ...postsBlocks);
 };
 
-const renderInput = (isValid, clearing = false) => {
+const renderForm = (state, i18next) => {
   const input = document.querySelector(selectors.rssAddInput);
-  if (!input) {
+  const btn = document.querySelector(selectors.rssAddBtn);
+  const validFeedbackElement = document.querySelector(selectors.validFeedback);
+  const invalidFeedbackElement = document.querySelector(selectors.invalidFeedback);
+
+  if (!input || !btn || !validFeedbackElement || !invalidFeedbackElement) {
     return;
   }
 
-  if (clearing) {
-    input.value = '';
+  switch (state.form.state) {
+    case 'filling':
+      input.removeAttribute('readonly');
+      input.classList.remove('is-invalid');
+      input.focus();
+      invalidFeedbackElement.textContent = '';
+      validFeedbackElement.textContent = '';
+      btn.disabled = false;
+      break;
+
+    case 'sending':
+      input.setAttribute('readonly', true);
+      input.classList.remove('is-invalid');
+      invalidFeedbackElement.textContent = '';
+      validFeedbackElement.textContent = '';
+      btn.disabled = true;
+      break;
+
+    case 'error':
+      input.removeAttribute('readonly');
+      input.classList.remove('is-valid');
+      input.classList.add('is-invalid');
+      input.focus();
+      validFeedbackElement.textContent = '';
+      invalidFeedbackElement.textContent = state.form.error;
+      btn.disabled = false;
+      break;
+
+    case 'success':
+      input.removeAttribute('readonly');
+      input.value = '';
+      input.classList.remove('is-invalid');
+      input.classList.add('is-valid');
+      invalidFeedbackElement.textContent = '';
+      validFeedbackElement.textContent = i18next.t('messages.rssAddSuccessfully');
+      btn.disabled = false;
+      break;
+
+    default:
+      break;
   }
-
-  if (isValid) {
-    input.classList.remove('is-invalid');
-    input.classList.add('is-valid');
-
-    return;
-  }
-
-  input.classList.remove('is-valid');
-  input.classList.add('is-invalid');
-  input.focus();
-};
-
-const renderFeedback = (feedback, isValid) => {
-  const feedbackSelector = isValid ? selectors.validFeedback : selectors.invalidFeedback;
-  const feedbackElement = document.querySelector(feedbackSelector);
-  if (!feedbackElement) {
-    return;
-  }
-
-  if (feedback === null) {
-    feedbackElement.textContent = '';
-
-    return;
-  }
-
-  feedbackElement.textContent = feedback;
 };
 
 const renderModal = (postId, postList) => {
@@ -138,22 +153,15 @@ const renderModal = (postId, postList) => {
 export default (path, value, i18next, state) => {
   switch (path) {
     case 'rssList':
-      renderInput(true, true);
       renderFeeds(value, i18next);
-      renderFeedback(i18next.t('messages.rssAddSuccessfully'), true);
       break;
 
     case 'postList':
       renderPosts(value, i18next, state);
       break;
 
-    case 'form.valid':
-      renderInput(value);
-      break;
-
-    case 'form.error':
-      renderFeedback(value, false);
-      renderFeedback(null, true);
+    case 'form.state':
+      renderForm(state, i18next);
       break;
 
     case 'uiState.viewedPosts':
