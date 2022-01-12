@@ -3,7 +3,7 @@ import i18next from 'i18next';
 import render from './renderer.js';
 import selectors from './selectors';
 import {
-  inputHandler, submitHandler, postsLoader, modalCloseHandler,
+  submitHandler, postsLoader, modalCloseHandler,
 } from './handlers.js';
 import ru from './lang/ru';
 
@@ -18,8 +18,7 @@ export default () => {
     rssList: [],
     postList: [],
     form: {
-      valid: true,
-      value: '',
+      state: 'filling',
       error: null,
     },
     uiState: {
@@ -30,11 +29,6 @@ export default () => {
   const state = onChange(initState, (path, value) => {
     render(path, value, i18nextInstance, state);
   });
-
-  const inputRss = document.querySelector(selectors.rssAddInput);
-  if (inputRss) {
-    inputRss.addEventListener('change', (e) => inputHandler(e, state));
-  }
 
   const form = document.querySelector(selectors.rssForm);
   if (form) {
