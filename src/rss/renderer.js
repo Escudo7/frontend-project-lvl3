@@ -80,28 +80,25 @@ const renderPosts = (posts, i18next, state) => {
 const renderForm = (state, i18next) => {
   const input = document.querySelector(selectors.rssAddInput);
   const btn = document.querySelector(selectors.rssAddBtn);
-  const validFeedbackElement = document.querySelector(selectors.validFeedback);
-  const invalidFeedbackElement = document.querySelector(selectors.invalidFeedback);
+  const feedbackElement = document.querySelector(selectors.feedback);
 
-  if (!input || !btn || !validFeedbackElement || !invalidFeedbackElement) {
+  if (!input || !btn || !feedbackElement) {
     return;
   }
 
   switch (state.form.state) {
     case 'filling':
       input.removeAttribute('readonly');
-      input.classList.remove('is-invalid');
+      input.classList.remove('is-invalid', 'is-valid');
       input.focus();
-      invalidFeedbackElement.textContent = '';
-      validFeedbackElement.textContent = '';
+      feedbackElement.textContent = '';
       btn.disabled = false;
       break;
 
     case 'sending':
       input.setAttribute('readonly', true);
-      input.classList.remove('is-invalid');
-      invalidFeedbackElement.textContent = '';
-      validFeedbackElement.textContent = '';
+      input.classList.remove('is-invalid', 'is-valid');
+      feedbackElement.textContent = '';
       btn.disabled = true;
       break;
 
@@ -110,8 +107,8 @@ const renderForm = (state, i18next) => {
       input.classList.remove('is-valid');
       input.classList.add('is-invalid');
       input.focus();
-      validFeedbackElement.textContent = '';
-      invalidFeedbackElement.textContent = state.form.error;
+      feedbackElement.classList.add('invalid-feedback');
+      feedbackElement.textContent = state.form.error;
       btn.disabled = false;
       break;
 
@@ -120,8 +117,8 @@ const renderForm = (state, i18next) => {
       input.value = '';
       input.classList.remove('is-invalid');
       input.classList.add('is-valid');
-      invalidFeedbackElement.textContent = '';
-      validFeedbackElement.textContent = i18next.t('messages.rssAddSuccessfully');
+      feedbackElement.classList.remove('invalid-feedback');
+      feedbackElement.textContent = i18next.t('messages.rssAddSuccessfully');
       btn.disabled = false;
       break;
 

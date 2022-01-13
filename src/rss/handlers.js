@@ -1,5 +1,6 @@
 import axios from 'axios';
 import _ from 'lodash';
+import onChange from 'on-change';
 import validate from './validation.js';
 import parse from './parser.js';
 
@@ -31,11 +32,12 @@ export const submitHandler = (event, state, i18next) => {
       const feedId = _.uniqueId('feed_');
       const feed = { ...dataParsed.feed, link, id: feedId };
       const posts = dataParsed.posts.map((post) => ({ ...post, id: _.uniqueId('post_'), feedId }));
+      const { rssList, postList } = onChange.target(state);
 
       state.form.error = null;
       state.form.state = 'success';
-      state.rssList.unshift(feed);
-      state.postList.unshift(...posts);
+      state.rssList = [feed, ...rssList];
+      state.postList = [...posts, ...postList];
     })
     .catch((exception) => {
       state.form.error = exception.message;
@@ -74,7 +76,8 @@ const postsLoad = (state) => {
 
       if (posts.length > 0) {
         const postsPrepared = posts.map((post) => ({ ...post, id: _.uniqueId('post_'), feedId: feed.id }));
-        state.postList.unshift(...postsPrepared);
+        const postSaved = onChange.target(state).postList;
+        state.postList = [...postsPrepared, ...postSaved];
       }
     });
   });
@@ -88,7 +91,8 @@ export const postsLoader = (state, timeout) => {
 
 export const postPreview = (e, state) => {
   const { postId } = e.target.dataset;
-  state.uiState.viewedPosts.push(postId);
+  const { viewedPosts } = onChange.target(state).uiState;
+  state.uiState.viewedPosts = [...viewedPosts, postId];
   state.uiState.viewingPost = postId;
 };
 
